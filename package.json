@@ -43,8 +43,10 @@
     "@typescript-eslint/utils": "5.36.2"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.12",
     "dom-to-image": "^2.6.0",
+    "iconv": "^3.0.1",
     "jquery": "^3.6.1",
     "node-fetch": "^3.2.10",
     "node-html-to-image": "^3.2.4"
