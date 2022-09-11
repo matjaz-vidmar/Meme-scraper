@@ -1,56 +1,33 @@
-import cheerio from 'cheerio';
-// import { first } from 'cheerio/lib/api/traversing';
-// import domtoimage from 'dom-to-image';
-import fs from 'fs';
-// import iconvlite from 'iconv-lite';
+import * as cheerio from 'cheerio';
+import fs, { write } from 'fs';
 import fetch from 'node-fetch';
+import path from 'path';
 
-// import nodeHtmlToImage from 'node-html-to-image';
-
+// initial fetch
 const response = await fetch(
   'https://memegen-link-examples-upleveled.netlify.app/',
 );
 const body = await response.text();
 const $ = cheerio.load(body);
 let div = $('section > div');
-
+// creating meme url array
 let sources = [];
 div.each(function () {
   sources.push($(this).find('img').attr('src'));
 });
-
+// first ten array
 let firstTenArray = sources.splice(0, 10);
-
-const response2 = await fetch(firstTenArray);
-const picture = await response2.text();
-
-// let writtenFile = fs.writeFile('./memes/01.jpg', picture);
-
-// console.log(picture);
-
-// const sourcesBuffer = Buffer.from(firstTenSources);
-
-let stream = fs.createWriteStream(picture);
-
-stream.once(picture, () => {
-  stream.write('01.jpg\n');
-  stream.write('02.jpg\n');
-  stream.write('03.jpg\n');
-  stream.write('04.jpg\n');
-  stream.write('05.jpg\n');
-  stream.write('06.jpg\n');
-  stream.write('07.jpg\n');
-  stream.write('08.jpg\n');
-  stream.write('09.jpg\n');
-  stream.write('10.jpg\n');
-
-  // Important to close the stream when you're ready
-  stream.end();
+// creating a directory
+fs.mkdir(path.join('memes'), { recursive: true }, (err) => {
+  if (err) {
+    return console.error(err);
+  }
+  console.log('Directory created successfully!');
 });
-
-// console.log(stream);
-
-// const contents = fs.readFile(firstTenSources, (err, data) => {
-// if (err) throw err;
-// console.log(data);
-// });
+// loop for writing memes
+for (let i = 0; i < firstTenArray.length; i++) {
+  const getImage = await fetch(firstTenArray[i]);
+  const arrayBuffer = await getImage.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  fs.writeFile(`./memes/0${i + 1}.jpg`, buffer, function () {});
+}
