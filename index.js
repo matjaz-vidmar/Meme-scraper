@@ -1,5 +1,5 @@
-import cheerio from 'cheerio';
-import fs, { write } from 'fs';
+import * as cheerio from 'cheerio';
+import fs from 'fs';
 import fetch from 'node-fetch';
 import path from 'path';
 
